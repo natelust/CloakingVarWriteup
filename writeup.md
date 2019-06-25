@@ -10,6 +10,8 @@ The following section describes some technical aspects of the implementation in 
 A preliminary working implementation of this behavior has been made against cpython 3.7. The code can be found
 [here](https://github.com/natelust/cpython/tree/cloakingVars) (The repo should be on the cloakingVars branch.
 
+This code was tested on an 18.04 Ubuntu linux installation with CFLAGS="-g -O0"
+
 ## Implementation details
 This change adds two new entries to the type struct named `tp_setself` and `tp_getself`. These names are entirely
 negotiable, but naming is hard and they had nice symmetry with all the other get and set methods.
@@ -50,6 +52,9 @@ includes:
 * Write documentation
 
 ## Demo
+Example python code which makes use of cloaking variable behavior. The output from this code can be found in
+the section following the code.
+
 ```python
 # These are "builtin" functions for working with cloaked variables                                                                
 # They may be implemented in c at some point to avoid the inspect
