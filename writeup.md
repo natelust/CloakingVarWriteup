@@ -1,11 +1,11 @@
 # Proposal to add assignment and LOAD overloading
 
 This pre-pep aims to introduce the ability for a class to specify what will happen when a named instance is
-loaded by the interpreter, or when the name is attempted to be rebound. This is similar to the behavior of a
-property field on a class, but for the class itself. Variables that implement these behaviors will be referred
-to as cloaking variables in this document, as what the user sees cloaks the underlying object. Towards the
-bottom of this document is a set of behaviors this functionality would add, but is by no means exhaustive.
-The following section describes some technical aspects of the implementation in cpython.
+loaded by the interpreter, or when the name is attempted to be re-bound. This is similar to the behavior of a
+property field on a class, but for an instance the class itself. Variables that implement these behaviors will
+be referred to as cloaking variables in this document, as what the user sees cloaks the underlying object.
+Towards the bottom of this document is a set of behaviors this functionality would add, but is by no means
+exhaustive.  The following section describes some technical aspects of the implementation in cpython.
 
 A preliminary working implementation of this behavior has been made against cpython 3.7. The code can be found
 [here](https://github.com/natelust/cpython/tree/cloakingVars) (The repo should be on the cloakingVars branch.
@@ -26,12 +26,12 @@ runtime penalty on code that does not use this behavior is only an if statement 
 corresponding dict (or array in the case of fastlocals). This statement checks if a pointer is null, so
 very minimal. All other changes are put inside this if block.
 
-This only modifies behaviors of dicts that are used as namespace containers. Dicts that are used in the normal
-course of a user program retain the existing behavior. This is both because the operation acts on the dict
-itself, and that this is likely to be the least confusing behavior. This behavior the same for all container
-types that are not "namespaces". This means that a cloaking variable in a dictionary will be seen as a
-cloaking variable and not what the cloaking variable implements. Though technically namespaces are the
-same as the dict type, in practice they appear differently to users.
+This only modifies the behaviors of dicts that are used as namespace containers. Dicts that are used in the
+normal course of a user program retain the existing behavior. This is both because the operation can be seen
+as acting on the dict itself, and that this is likely to be the least confusing behavior. This behavior is the
+same for all container types that are not "namespaces". This means that a cloaking variable in a dictionary
+will be seen as a cloaking variable and not what the cloaking variable implements. Though technically
+namespaces are the same as the dict type, in practice they appear differently to users.
 
 As of the time of writing this document, this behavior does not extend to `__slots__` and or closure
 variables. These retain the existing look-up behavior, i.e. the user will see the cloaking variable, and not
@@ -39,11 +39,11 @@ what it normally would present. There is no technical reason for this, but is si
 
 ## Impacts on existing code
 There is almost no impact on existing code. The only exception is to classes that have defined `__getself__`
-and `__setset__` for some functionality.
+and `__setset__` methods for some functionality.
 
 ## Work to do
-This is a working implementation that will not impact existing code, but some further work is required. This
-includes:
+This is a working implementation of the new behavior that will not have an impact on existing code, but some
+further work is required. This includes:
 
 * Run extensive tests, and have more eyes for code review
 * Verify all refcounting is handled correctly.
